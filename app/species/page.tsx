@@ -17,6 +17,7 @@ export default async function SpeciesPage() {
           + 생물 등록
         </Link>
       </div>
+      <p className="text-xs text-gray-400 mb-4">모든 정보는 유저에 의해 작성되므로 틀린 부분이 있을 수 있습니다.</p>
       <SpeciesList species={species ?? []} />
     </div>
   )
