@@ -3,6 +3,7 @@ export interface Profile {
   display_name: string
   grade: number | null
   class: string | null
+  points: number
   created_at: string
 }
 
