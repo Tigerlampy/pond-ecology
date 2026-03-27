@@ -21,10 +21,10 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
 
   const { pathname } = request.nextUrl
-  if (!user && PROTECTED.some(p => pathname.startsWith(p))) {
+  if (!session && PROTECTED.some(p => pathname.startsWith(p))) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/login'
     return NextResponse.redirect(loginUrl)
