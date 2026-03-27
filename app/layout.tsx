@@ -11,8 +11,8 @@ const notoSerifKR = Noto_Serif_KR({
 })
 
 export const metadata: Metadata = {
-  title: '연못 생태 도감',
-  description: '학교 연못 생물 관찰 기록',
+  title: '경기북과학고 연못 생태 도감',
+  description: '경기북과학고 연못 생물 관찰 기록',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

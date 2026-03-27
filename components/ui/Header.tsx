@@ -47,7 +47,7 @@ export default function Header() {
     <header className="bg-emerald-900 text-stone-100 shadow-md">
       <div className="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
         <Link href="/species" className="font-serif-kr text-xl font-semibold tracking-wide hover:text-emerald-200 transition-colors">
-          🌿 연못 생태 도감
+          🌿 경기북과학고 연못 생태 도감
         </Link>
         <nav className="flex items-center gap-5 text-sm">
           <Link href="/species" className="hover:text-emerald-300 transition-colors">도감</Link>
