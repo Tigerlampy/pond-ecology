@@ -53,6 +53,7 @@ export default function Header() {
           <Link href="/species" className="hover:text-emerald-300 transition-colors">도감</Link>
           <Link href="/observations" className="hover:text-emerald-300 transition-colors">관측 기록</Link>
           <Link href="/stats" className="hover:text-emerald-300 transition-colors">통계</Link>
+          <Link href="/ranking" className="hover:text-emerald-300 transition-colors">명예의 전당</Link>
           {user ? (
             <div className="flex items-center gap-3">
               {profile && (
