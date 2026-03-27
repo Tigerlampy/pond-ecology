@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { uploadImage, generateStoragePath } from '@/lib/storage'
 import { getSeasonFromDate } from '@/lib/utils'
@@ -19,13 +19,16 @@ export default function ObservationForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
     supabase.from('species').select('id, name_ko').order('name_ko').then(({ data }) => {
       if (data) {
         setSpecies(data as Species[])
-        if (data.length > 0) setSpeciesId(data[0].id)
+        const preselect = searchParams.get('species_id')
+        const found = data.find(s => s.id === preselect)
+        setSpeciesId(found?.id ?? (data[0]?.id ?? ''))
       }
     })
   }, [])

@@ -17,6 +17,7 @@ export default function SpeciesForm() {
   const [habitat, setHabitat] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [duplicateId, setDuplicateId] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
@@ -24,6 +25,7 @@ export default function SpeciesForm() {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setDuplicateId(null)
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('로그인이 필요합니다')
@@ -44,7 +46,15 @@ export default function SpeciesForm() {
         created_by: user.id,
       }).select().single()
 
-      if (dbError) throw new Error(dbError.message)
+      if (dbError) {
+        if (dbError.code === '23505') {
+          const { data: existing } = await supabase
+            .from('species').select('id').eq('name_ko', nameKo).single()
+          setDuplicateId(existing?.id ?? null)
+          throw new Error(`이미 등록된 생물종입니다.`)
+        }
+        throw new Error(dbError.message)
+      }
       router.push(`/species/${data.id}`)
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : '등록 실패')
@@ -99,7 +109,16 @@ export default function SpeciesForm() {
           placeholder="예: 연못 가장자리, 수초 주변"
         />
       </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && (
+        <div className="text-red-500 text-sm">
+          <p>{error}</p>
+          {duplicateId && (
+            <a href={`/observations/new?species_id=${duplicateId}`} className="text-green-600 underline">
+              관측 기록에 추가하기
+            </a>
+          )}
+        </div>
+      )}
       <button
         type="submit" disabled={loading}
         className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"

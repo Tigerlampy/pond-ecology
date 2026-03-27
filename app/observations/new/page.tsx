@@ -1,5 +1,10 @@
+import { Suspense } from 'react'
 import ObservationForm from '@/components/observations/ObservationForm'
 
 export default function NewObservationPage() {
-  return <ObservationForm />
+  return (
+    <Suspense>
+      <ObservationForm />
+    </Suspense>
+  )
 }
