@@ -9,6 +9,7 @@ export default function AuthForm({ mode }: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
+  const [studentNumber, setStudentNumber] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -25,7 +26,7 @@ export default function AuthForm({ mode }: Props) {
       } else {
         const { error } = await supabase.auth.signUp({
           email, password,
-          options: { data: { display_name: displayName } },
+          options: { data: { display_name: displayName, student_number: studentNumber } },
         })
         if (error) throw error
       }
@@ -43,13 +44,22 @@ export default function AuthForm({ mode }: Props) {
         {mode === 'login' ? '로그인' : '회원가입'}
       </h1>
       {mode === 'signup' && (
-        <input
-          className="w-full border rounded px-3 py-2"
-          placeholder="이름"
-          value={displayName}
-          onChange={e => setDisplayName(e.target.value)}
-          required
-        />
+        <>
+          <input
+            className="w-full border rounded px-3 py-2"
+            placeholder="이름"
+            value={displayName}
+            onChange={e => setDisplayName(e.target.value)}
+            required
+          />
+          <input
+            className="w-full border rounded px-3 py-2"
+            placeholder="학번 (예: 10215)"
+            value={studentNumber}
+            onChange={e => setStudentNumber(e.target.value)}
+            required
+          />
+        </>
       )}
       <input
         className="w-full border rounded px-3 py-2"
@@ -65,15 +75,15 @@ export default function AuthForm({ mode }: Props) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+        className="w-full bg-emerald-700 text-white py-2 rounded-lg hover:bg-emerald-800 disabled:opacity-50 transition-colors"
       >
         {loading ? '처리 중...' : mode === 'login' ? '로그인' : '가입하기'}
       </button>
-      <p className="text-center text-sm text-gray-500">
+      <p className="text-center text-sm text-stone-500">
         {mode === 'login' ? (
-          <><a href="/signup" className="text-green-600 hover:underline">계정 만들기</a></>
+          <a href="/signup" className="text-emerald-700 hover:underline">계정 만들기</a>
         ) : (
-          <><a href="/login" className="text-green-600 hover:underline">이미 계정이 있으신가요?</a></>
+          <a href="/login" className="text-emerald-700 hover:underline">이미 계정이 있으신가요?</a>
         )}
       </p>
     </form>

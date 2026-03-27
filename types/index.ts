@@ -4,6 +4,7 @@ export interface Profile {
   grade: number | null
   class: string | null
   points: number
+  student_number: string | null
   created_at: string
 }
 

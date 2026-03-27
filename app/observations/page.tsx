@@ -6,7 +6,7 @@ import type { Observation } from '@/types'
 
 type ObservationWithRelations = Observation & {
   species: { name_ko: string; image_url: string | null } | null
-  observer: { display_name: string } | null
+  observer: { display_name: string; student_number: string | null } | null
 }
 
 const SEASON_BADGE: Record<string, string> = {
@@ -20,7 +20,7 @@ export default async function ObservationsPage() {
   const supabase = await createClient()
   const { data: observations } = await supabase
     .from('observations')
-    .select('*, species(name_ko, image_url), observer:profiles(display_name)')
+    .select('*, species(name_ko, image_url), observer:profiles(display_name, student_number)')
     .order('observed_at', { ascending: false })
 
   const list = (observations ?? []) as ObservationWithRelations[]
@@ -69,7 +69,10 @@ export default async function ObservationsPage() {
                 </p>
                 {obs.notes && <p className="text-sm text-stone-600 mt-1">{obs.notes}</p>}
                 {obs.observer && (
-                  <p className="text-xs text-stone-400 mt-1">기록: {obs.observer.display_name}</p>
+                  <p className="text-xs text-stone-400 mt-1">
+                    기록: {obs.observer.display_name}
+                    {obs.observer.student_number && ` (${obs.observer.student_number})`}
+                  </p>
                 )}
               </div>
             </li>
