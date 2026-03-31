@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 const MEDALS = ['🥇', '🥈', '🥉']
 
 export default async function RankingPage() {
