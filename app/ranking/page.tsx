@@ -5,11 +5,8 @@ const MEDALS = ['🥇', '🥈', '🥉']
 export default async function RankingPage() {
   const supabase = await createClient()
 
-  // api.public_ranking 뷰 사용: display_name + points만 공개 (학번/UUID 노출 없음)
   const { data: ranking } = await supabase
-    .schema('api')
-    .from('public_ranking')
-    .select('display_name, points')
+    .rpc('get_public_ranking')
 
   const list = ranking ?? []
 
@@ -38,7 +35,7 @@ export default async function RankingPage() {
         <p className="text-center text-stone-400 mt-12">아직 참여한 학생이 없습니다.</p>
       ) : (
         <ul className="space-y-3">
-          {list.map((profile, i) => (
+          {list.map((profile: { display_name: string; points: number }, i: number) => (
             <li
               key={i}
               className={`flex items-center gap-4 bg-white border rounded-xl px-5 py-4 ${
