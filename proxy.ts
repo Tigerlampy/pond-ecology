@@ -34,5 +34,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/species/new', '/observations/new'],
+  matcher: [
+    // 정적 파일, 이미지, _next 제외한 모든 경로에서 세션 갱신
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }

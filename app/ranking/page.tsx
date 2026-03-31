@@ -5,12 +5,12 @@ const MEDALS = ['🥇', '🥈', '🥉']
 export default async function RankingPage() {
   const supabase = await createClient()
 
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('display_name, student_number, points')
-    .order('points', { ascending: false })
+  // public_ranking 뷰 사용: display_name + points만 공개 (학번/UUID 노출 없음)
+  const { data: ranking } = await supabase
+    .from('public_ranking')
+    .select('display_name, points')
 
-  const list = profiles ?? []
+  const list = ranking ?? []
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -52,9 +52,6 @@ export default async function RankingPage() {
               </span>
               <div className="flex-1">
                 <p className="font-serif-kr font-semibold text-stone-800">{profile.display_name}</p>
-                {profile.student_number && (
-                  <p className="text-xs text-stone-400">{profile.student_number}</p>
-                )}
               </div>
               <span className={`font-bold text-lg ${i === 0 ? 'text-yellow-500' : 'text-emerald-600'}`}>
                 {profile.points}pt

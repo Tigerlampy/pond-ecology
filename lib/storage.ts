@@ -12,12 +12,18 @@ export function getPublicUrl(bucket: string, path: string): string {
   return data.publicUrl
 }
 
+// EXIF 제거 + 서버사이드 업로드 (VULN-06 대응)
 export async function uploadImage(bucket: string, path: string, file: File): Promise<string> {
-  const supabase = createClient()
-  const { error } = await supabase.storage.from(bucket).upload(path, file, {
-    cacheControl: '3600',
-    upsert: false,
-  })
-  if (error) throw new Error(`업로드 실패: ${error.message}`)
-  return getPublicUrl(bucket, path)
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('bucket', bucket)
+  formData.append('path', path)
+
+  const res = await fetch('/api/upload', { method: 'POST', body: formData })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? '업로드 실패')
+  }
+  const { publicUrl } = await res.json()
+  return publicUrl
 }
