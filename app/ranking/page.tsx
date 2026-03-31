@@ -10,7 +10,7 @@ export default async function RankingPage() {
   const { data: ranking, error } = await supabase
     .rpc('get_public_ranking')
 
-  if (error) console.error('[ranking]', error)
+  console.log('[ranking] data:', JSON.stringify(ranking), 'error:', JSON.stringify(error))
   const list = ranking ?? []
 
   return (
