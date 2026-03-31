@@ -5,8 +5,9 @@ const MEDALS = ['🥇', '🥈', '🥉']
 export default async function RankingPage() {
   const supabase = await createClient()
 
-  // public_ranking 뷰 사용: display_name + points만 공개 (학번/UUID 노출 없음)
+  // api.public_ranking 뷰 사용: display_name + points만 공개 (학번/UUID 노출 없음)
   const { data: ranking } = await supabase
+    .schema('api')
     .from('public_ranking')
     .select('display_name, points')
 
