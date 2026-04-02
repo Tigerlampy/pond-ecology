@@ -7,9 +7,10 @@ const MEDALS = ['🥇', '🥈', '🥉']
 export default async function RankingPage() {
   const supabase = await createClient()
 
-  const { data: ranking } = await supabase
+  const { data: ranking, error } = await supabase
     .rpc('get_public_ranking')
 
+  if (error) console.error('[ranking] rpc error:', error)
   const list = ranking ?? []
 
   return (
