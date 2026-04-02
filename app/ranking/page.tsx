@@ -8,8 +8,7 @@ export default async function RankingPage() {
   const supabase = await createClient()
 
   const { data: ranking } = await supabase
-    .from('public_ranking')
-    .select('display_name, points')
+    .rpc('get_public_ranking')
 
   const list = ranking ?? []
 
