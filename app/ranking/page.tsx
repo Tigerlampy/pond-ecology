@@ -1,16 +1,20 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
 const MEDALS = ['🥇', '🥈', '🥉']
 
 export default async function RankingPage() {
-  const supabase = await createClient()
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  )
 
-  const { data: ranking, error } = await supabase
-    .rpc('get_public_ranking')
+  const { data: ranking } = await supabase
+    .from('profiles')
+    .select('display_name, points')
+    .order('points', { ascending: false })
 
-  if (error) console.error('[ranking] rpc error:', error)
   const list = ranking ?? []
 
   return (
